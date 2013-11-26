@@ -1,0 +1,18 @@
+/*
+Theme Name: Utility Belt
+Description: Run arbitrary code in WordPress. Not for the faint of heart.
+Author: Matthew Boynes
+*/
+
+body { padding-top: 60px; }
+@media (max-width:979px) { body { padding-top: 0; } }
+code { color: black; }
+pre.well {
+	white-space: pre;
+	word-break: normal;
+	word-wrap: normal;
+	overflow: auto;
+}
+table pre {
+	white-space: pre;
+}

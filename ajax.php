@@ -44,7 +44,7 @@ function ub_elasticsearch() {
 			'headers' => array( 'Content-Type' => 'application/json' ),
 			'body' => $_POST['es_query']
 		) );
-		print_r( $request );
+		var_export( $request );
 	}
 	exit;
 }
@@ -70,14 +70,14 @@ function ub_regex() {
 		switch ( $_POST['regex'] ) {
 			case 'Match':
 				if ( preg_match( $_POST['expression'], $_POST['content'], $matches ) )
-					echo htmlentities( print_r( $matches, 1 ) );
+					echo htmlentities( var_export( $matches, 1 ) );
 				else
 					echo "No matches Found";
 				break;
 
 			case 'Match All':
 				if ( $count = preg_match_all( $_POST['expression'], $_POST['content'], $matches ) )
-					echo "$count matches found\n", htmlentities( print_r( $matches, 1 ) );
+					echo "$count matches found\n", htmlentities( var_export( $matches, 1 ) );
 				else
 					echo "No matches found";
 				break;
@@ -116,13 +116,14 @@ function ub_serialization() {
 		if ( 'Serialize' == $_POST['serialization'] ) {
 			echo serialize( call_user_func( create_function('', "return {$_POST['serializee']};") ) );
 		} elseif ( 'JSON Encode' == $_POST['serialization'] ) {
-			echo json_encode( call_user_func( create_function('', "return {$_POST['serializee']};") ) );
+			$JSON_PRETTY_PRINT = defined( 'JSON_PRETTY_PRINT' ) ? JSON_PRETTY_PRINT : null;
+			echo json_encode( call_user_func( create_function('', "return {$_POST['serializee']};" ) ), $JSON_PRETTY_PRINT );
 		} elseif ( 'JSON Decode' == $_POST['serialization'] ) {
-			print_r( json_decode( $_POST['serializee'], true ) );
+			var_export( json_decode( $_POST['serializee'], true ) );
 		} else {
 			$unserialized = unserialize( $_POST['serializee'] );
 			if ( false !== $unserialized ) {
-				print_r( $unserialized );
+				var_export( $unserialized );
 			} else {
 				# There was an error, try to fix it
 				# common issue is with crlf
@@ -130,7 +131,7 @@ function ub_serialization() {
 				$unserialized = unserialize( $serializee );
 				if ( false !== $unserialized ) {
 					echo "Notice: CRLF newlines corrected\n===============================\n\n";
-					print_r( $unserialized );
+					var_export( $unserialized );
 				} else {
 					echo 'Error unserializing data';
 				}

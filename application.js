@@ -11,7 +11,7 @@ jQuery(function($){
 			if('<html>'==data.substr(0,6))
 				$('#'+$form.data('response')+'').html(data.replace(/<\/?html>/,'')).fadeIn();
 			else
-				$('#'+$form.data('response')+'').html('<pre class="well">'+data+'</pre>').fadeIn();
+				$('#'+$form.data('response')+'').html( $('<pre class="well" />').text( data ) ).fadeIn();
 		});
 	});
 	$('#view_wrapper').on('click','.reload',function(e){

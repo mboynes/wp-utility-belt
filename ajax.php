@@ -1,5 +1,19 @@
 <?php
 
+function ub_stopwatch( $start_time, $stop_time = false ) {
+	if ( $stop_time ) {
+		$time = $stop_time - $start_time;
+	} else {
+		$time = microtime( true ) - $start_time;
+	}
+
+	if ( $time > 1 ) {
+		return number_format( $time, 3 ) . ' s';
+	} else {
+		return number_format( $time * 1000, 1 ) . ' ms';
+	}
+}
+
 function ub_ensure_ajaxurl() { ?>
 	<script type="text/javascript">var ajaxurl = '<?php echo admin_url( 'admin-ajax.php' ); ?>';</script>
 	<?php
@@ -17,6 +31,113 @@ function ub_home() {
 	exit;
 }
 add_action( 'wp_ajax_home', 'ub_home' );
+
+
+function ub_benchmark() {
+	if ( 'get' == strtolower( $_SERVER['REQUEST_METHOD'] ) ) {
+		get_template_part( 'pages/benchmark' );
+	} else {
+		header( "Content-Type: text/plain" );
+		$_POST = stripslashes_deep( $_POST );
+		$iterations = empty( $_POST['iterations'] ) ? 1000000 : absint( $_POST['iterations'] );
+		if ( ! empty( $_POST['code_a'] ) ) {
+			if ( ! empty( $_POST['code_b'] ) ) {
+				@ob_end_clean();
+				echo "Starting benchmark with {$iterations} iterations\n";
+				echo "================================================\n";
+				echo "Sample Run, Code A:\n";
+				if ( false === eval( $_POST['code_a'] ) ) {
+					echo 'PHP Error encountered in code A, execution halted';
+					exit;
+				}
+				echo "\nSample Run, Code B:\n";
+				if ( false === eval( $_POST['code_b'] ) ) {
+					echo 'PHP Error encountered in code A, execution halted';
+					exit;
+				}
+
+				$times = array(
+					'a' => array(),
+					'b' => array(),
+				);
+
+				ob_start();
+				$loops = ceil( $iterations / 1000 );
+				for ( $j = 0; $j <= $loops; ++$j ) {
+					$i = 0;
+					$start = microtime( true );
+					while ( $i < $iterations && $i < $j * 1000 ) {
+						$i++;
+						@ob_clean();
+						if ( false === eval( $_POST['code_a'] ) ) {
+							ob_end_flush();
+							echo 'PHP Error encountered in code A, execution halted';
+							break 2;
+						}
+					}
+					$times['a'][] = microtime( true ) - $start;
+
+					$i = 0;
+					$start = microtime( true );
+					while ( $i < $iterations && $i < $j * 1000 ) {
+						$i++;
+						@ob_clean();
+						if ( false === eval( $_POST['code_b'] ) ) {
+							ob_end_flush();
+							echo 'PHP Error encountered in code B, execution halted';
+							break 2;
+						}
+					}
+					$times['b'][] = microtime( true ) - $start;
+				}
+
+				@ob_end_clean();
+				echo "\n================================================";
+				echo "\nCode A total time: ";
+				$total = array_sum( $times['a'] );
+				if ( $total > 1 ) {
+					echo number_format( $total, 3 ) . ' s';
+				} else {
+					echo number_format( $total * 1000, 1 ) . ' ms';
+				}
+				echo "\nCode B total time: ";
+				$total = array_sum( $times['b'] );
+				if ( $total > 1 ) {
+					echo number_format( $total, 3 ) . ' s';
+				} else {
+					echo number_format( $total * 1000, 1 ) . ' ms';
+				}
+
+			} else {
+				// We're just benchmarking one block of code
+				$start = microtime( true );
+				$i = 0;
+				@ob_end_clean();
+				echo "Starting benchmark with {$iterations} iterations\n";
+				echo "================================================\n";
+				echo "Sample Run:\n";
+				if ( false === eval( $_POST['code_a'] ) ) {
+					echo 'PHP Error encountered, execution halted';
+					exit;
+				}
+				ob_start();
+				while ( $i++ < $iterations ) {
+					if ( false === eval( $_POST['code_a'] ) ) {
+						ob_end_flush();
+						echo 'PHP Error encountered, execution halted';
+						break;
+					}
+					@ob_clean();
+				}
+				@ob_end_clean();
+				echo "\n================================================\n";
+				echo "Total time: " . ub_stopwatch( $start );
+			}
+		}
+	}
+	exit;
+}
+add_action( 'wp_ajax_benchmark', 'ub_benchmark' );
 
 
 function ub_wordpress() {

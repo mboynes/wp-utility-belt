@@ -33,6 +33,7 @@
 						<li><a href="#time">Date &amp; Time</a></li>
 						<li><a href="#printf">Printf</a></li>
 						<li><a href="#serialization">Serialization</a></li>
+						<li><a href="#benchmark">Benchmark</a></li>
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div>

@@ -40,11 +40,23 @@ function ub_benchmark() {
 		header( "Content-Type: text/plain" );
 		$_POST = stripslashes_deep( $_POST );
 		$iterations = empty( $_POST['iterations'] ) ? 1000000 : absint( $_POST['iterations'] );
+
+		if ( ! empty( $_POST['env'] ) ) {
+			if ( false === eval( $_POST['env'] ) ) {
+				echo 'PHP Error encountered in Environment code, execution halted';
+				exit;
+			}
+		}
+
 		if ( ! empty( $_POST['code_a'] ) ) {
 			if ( ! empty( $_POST['code_b'] ) ) {
+
+				$order = array( 'a', 'b' );
+				shuffle( $order );
+
 				@ob_end_clean();
-				echo "Starting benchmark with {$iterations} iterations\n";
-				echo "================================================\n";
+				echo "Starting benchmark with {$iterations} iterations in the order " . strtoupper( implode( '-', $order ) ) . "\n";
+				echo "=================================================================\n";
 				echo "Sample Run, Code A:\n";
 				if ( false === eval( $_POST['code_a'] ) ) {
 					echo 'PHP Error encountered in code A, execution halted';
@@ -69,30 +81,30 @@ function ub_benchmark() {
 					while ( $i < $iterations && $i < $j * 1000 ) {
 						$i++;
 						@ob_clean();
-						if ( false === eval( $_POST['code_a'] ) ) {
+						if ( false === eval( $_POST[ 'code_' . $order[0] ] ) ) {
 							ob_end_flush();
 							echo 'PHP Error encountered in code A, execution halted';
 							break 2;
 						}
 					}
-					$times['a'][] = microtime( true ) - $start;
+					$times[ $order[0] ][] = microtime( true ) - $start;
 
 					$i = 0;
 					$start = microtime( true );
 					while ( $i < $iterations && $i < $j * 1000 ) {
 						$i++;
 						@ob_clean();
-						if ( false === eval( $_POST['code_b'] ) ) {
+						if ( false === eval( $_POST[ 'code_' . $order[1] ] ) ) {
 							ob_end_flush();
 							echo 'PHP Error encountered in code B, execution halted';
 							break 2;
 						}
 					}
-					$times['b'][] = microtime( true ) - $start;
+					$times[ $order[1] ][] = microtime( true ) - $start;
 				}
 
 				@ob_end_clean();
-				echo "\n================================================";
+				echo "\n=================================================================";
 				echo "\nCode A total time: ";
 				$total = array_sum( $times['a'] );
 				if ( $total > 1 ) {

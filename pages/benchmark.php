@@ -7,17 +7,23 @@
 					<div class="control-group">
 						<label class="control-label" for="iterations">Iterations</label>
 						<div class="controls">
-							<input type="number" name="iterations" value="1000000" id="iterations" class="span2" />
+							<input type="number" name="iterations" value="100000" id="iterations" class="span2" />
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="code_a">Code A</label>
+						<label class="control-label" for="code_a">Environment (e.g. shared variables, functions, etc.)</label>
+						<div class="controls">
+							<textarea name="env" id="env" rows="4" cols="40" class="span6"></textarea>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="code_a">Test A</label>
 						<div class="controls">
 							<textarea name="code_a" id="code_a" rows="8" cols="40" class="span6"></textarea>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="code_b">Code B</label>
+						<label class="control-label" for="code_b">Test B</label>
 						<div class="controls">
 							<textarea name="code_b" id="code_b" rows="8" cols="40" class="span6"></textarea>
 						</div>

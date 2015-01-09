@@ -16,6 +16,17 @@ add_action( 'wp_title', function( $title, $sep, $seplocation ) {
 	return $title;
 }, 99, 3 );
 
+function ub_require_login() {
+	if ( ! is_user_logged_in() ) {
+		wp_safe_redirect( wp_login_url() );
+	}
+}
+add_action( 'template_redirect', 'ub_require_login' );
+
+function ub_login_message() {
+	return '<p class="message">' . esc_html__( 'You must log in to use the Utility Belt.', 'ub' ) . '</p>';
+}
+add_filter( 'login_message', 'ub_login_message' );
 
 if ( isset( $_POST['full'] ) ) {
 	$_POST = stripslashes_deep( $_POST );

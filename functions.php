@@ -24,7 +24,7 @@ function ub_require_login() {
 add_action( 'template_redirect', 'ub_require_login' );
 
 function ub_login_message() {
-	return '<p class="message">' . esc_html__( 'You must log in to use the Utility Belt.', 'ub' ) . '</p>';
+	return '<p class="message">' . esc_html__( 'You must log in to use the Utility Belt.', 'wp-utility-belt' ) . '</p>';
 }
 add_filter( 'login_message', 'ub_login_message' );
 

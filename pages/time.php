@@ -7,7 +7,7 @@
 			<div class="control-group">
 				<label class="control-label" for="date_format">Format</label>
 				<div class="controls">
-					<input type="text" name="date_format" value="Y-m-d H:i:s" id="date_format" class="span3" />
+					<input type="text" name="date_format" value="Y-m-d H:i:s T" id="date_format" class="span3" />
 				</div>
 				<a href="#formatModal" role="button" class="btn" data-toggle="modal">Reference</a>
 			</div>
@@ -58,7 +58,11 @@
 			</tr>
 			<tr>
 				<th scope="row">Formatted</th>
-				<td><?php echo date( 'Y-m-d H:i:s' ) ?></td>
+				<td><?php echo date( 'Y-m-d H:i:s T' ) ?></td>
+			</tr>
+			<tr>
+				<th scope="row">Local</th>
+				<td><?php echo wp_date( 'Y-m-d H:i:s T' ) ?></td>
 			</tr>
 		</tbody>
 	</table>

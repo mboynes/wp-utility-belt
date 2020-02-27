@@ -282,7 +282,7 @@ function ub_time() {
 	} else {
 		$_POST = stripslashes_deep( $_POST );
 		$content_type = 'text/html';
-		$format = isset( $_POST['date_format'] ) ? $_POST['date_format'] : 'Y-m-d H:i:s';
+		$format = isset( $_POST['date_format'] ) ? $_POST['date_format'] : 'Y-m-d H:i:s T';
 		$stamp = time();
 		if ( isset( $_POST['mktime'], $_POST['mktime'][0], $_POST['mktime'][1], $_POST['mktime'][2], $_POST['mktime'][3], $_POST['mktime'][4], $_POST['mktime'][5] )
 			&& '' != implode( '', $_POST['mktime'] )
@@ -316,6 +316,10 @@ function ub_time() {
 				<tr>
 					<th scope="row">Formatted</th>
 					<td><?php echo date( $format, $stamp ) ?></td>
+				</tr>
+				<tr>
+					<th scope="row">Local</th>
+					<td><?php echo wp_date( $format, $stamp ) ?></td>
 				</tr>
 			</tbody>
 		</table>

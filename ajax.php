@@ -169,14 +169,14 @@ function ub_regex() {
 		switch ( $_POST['regex'] ) {
 			case 'Match':
 				if ( preg_match( $_POST['expression'], $_POST['content'], $matches ) )
-					echo htmlentities( var_export( $matches, 1 ) );
+					echo wp_json_encode( $matches, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 				else
 					echo "No matches Found";
 				break;
 
 			case 'Match All':
 				if ( $count = preg_match_all( $_POST['expression'], $_POST['content'], $matches ) )
-					echo "$count matches found\n", htmlentities( var_export( $matches, 1 ) );
+					echo "$count matches found\n", wp_json_encode( $matches, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 				else
 					echo "No matches found";
 				break;
@@ -186,7 +186,7 @@ function ub_regex() {
 					echo "$count matches found\n";
 				else
 					echo "No matches found\n";
-				echo htmlentities( preg_replace( $_POST['expression'], $_POST['replace'], $_POST['content'] ) );
+				echo preg_replace( $_POST['expression'], $_POST['replace'], $_POST['content'] );
 				break;
 		}
 	}
@@ -215,22 +215,13 @@ function ub_serialization() {
 		if ( 'Serialize' == $_POST['serialization'] ) {
 			echo serialize( call_user_func( create_function('', "return {$_POST['serializee']};") ) );
 		} elseif ( 'JSON Encode' == $_POST['serialization'] ) {
-			$JSON_PRETTY_PRINT = defined( 'JSON_PRETTY_PRINT' ) ? JSON_PRETTY_PRINT : null;
-			echo json_encode( call_user_func( create_function('', "return {$_POST['serializee']};" ) ), $JSON_PRETTY_PRINT );
+			echo wp_json_encode( call_user_func( create_function('', "return {$_POST['serializee']};" ) ), JSON_PRETTY_PRINT );
 		} elseif ( 'JSON Decode' == $_POST['serialization'] ) {
-			$export = var_export( json_decode( $_POST['serializee'], true ), true );
-			$patterns = [
-				"/array \(/"                       => '[',
-				"/^([ ]*)\)(,?)$/m"                => '$1]$2',
-				"/=>[ ]?\n[ ]+\[/"                 => '=> [',
-				"/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
-				'/NULL/'                           => 'null',
-			];
-			echo preg_replace( array_keys($patterns), array_values($patterns), $export );
+			ub_nicer_var_export( json_decode( $_POST['serializee'], true ) );
 		} else {
 			$unserialized = unserialize( $_POST['serializee'] );
 			if ( false !== $unserialized ) {
-				var_export( $unserialized );
+				ub_nicer_var_export( $unserialized );
 			} else {
 				# There was an error, try to fix it
 				# common issue is with crlf
@@ -238,7 +229,7 @@ function ub_serialization() {
 				$unserialized = unserialize( $serializee );
 				if ( false !== $unserialized ) {
 					echo "Notice: CRLF newlines corrected\n===============================\n\n";
-					var_export( $unserialized );
+					ub_nicer_var_export( $unserialized );
 				} else {
 					echo 'Error unserializing data';
 				}
@@ -249,6 +240,24 @@ function ub_serialization() {
 }
 add_action( 'wp_ajax_serialization', 'ub_serialization' );
 
+function ub_nicer_var_export( $value, $echo = true ) {
+	$export   = var_export( $value, true );
+	$patterns = [
+		"/array \(/"                       => '[',
+		"/^([ ]*)\)(,?)$/m"                => '$1]$2',
+		"/=>[ ]?\n[ ]+\[/"                 => '=> [',
+		"/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
+		'/NULL/'                           => 'null',
+	];
+
+	$render = preg_replace( array_keys( $patterns ), array_values( $patterns ), $export );
+
+	if ( $echo ) {
+		echo $render;
+	} else {
+		return $render;
+	}
+}
 
 function ub_time() {
 	if ( 'get' == strtolower( $_SERVER['REQUEST_METHOD'] ) ) {

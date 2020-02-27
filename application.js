@@ -8,10 +8,14 @@ jQuery(function($){
 		button = ($(this).attr('name') ? '&' + $(this).attr('name') + '=' + $(this).val() : '');
 		url = $form.find('input[name="full"]').length ? '/' : ajaxurl;
 		$.post(url, $form.serialize()+button, function(data){
-			if('<html>'==data.substr(0,6))
+			if('<html>'==data.substr(0,6)) {
 				$('#'+$form.data('response')+'').html(data.replace(/<\/?html>/,'')).fadeIn();
-			else
+			} else if (-1 !== data.indexOf('xdebug-var-dump')) {
+				data = data.replace('xdebug-var-dump', 'xdebug-var-dump well');
+				$('#'+$form.data('response')+'').html(data).fadeIn();
+			} else {
 				$('#'+$form.data('response')+'').html( $('<pre class="well" />').text( data ) ).fadeIn();
+			}
 		});
 	});
 	$('#view_wrapper').on('click','.reload',function(e){

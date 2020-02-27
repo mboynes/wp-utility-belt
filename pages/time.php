@@ -12,6 +12,15 @@
 				<a href="#formatModal" role="button" class="btn" data-toggle="modal">Reference</a>
 			</div>
 
+			<div class="control-group">
+				<label class="control-label" for="date_timezone">Timezone for formatted output</label>
+				<div class="controls">
+					<select name="date_timezone" id="date_timezone" class="span3">
+						<?php echo wp_timezone_choice( 'UTC' ); ?>
+					</select>
+				</div>
+			</div>
+
 			<legend>Timestamp</legend>
 			<div class="control-group">
 				<label class="control-label" for="timestamp">Timestamp</label>
@@ -21,14 +30,14 @@
 			</div>
 
 			<div class="control-group">
-				<label class="control-label" for="strtotime"><code>strtotime</code> String</label>
+				<label class="control-label" for="strtotime"><code>strtotime</code> string (assumed UTC unless the string incldues a timezone)</label>
 				<div class="controls">
 					<input type="text" name="strtotime" value="" id="strtotime" class="span3" />
 				</div>
 			</div>
 
 			<div class="control-group">
-				<label class="control-label">Make Timestamp via <code>mktime</code></label>
+				<label class="control-label">Make timestamp via <code>mktime</code> (UTC)</label>
 				<div class="controls">
 					<input type="text" name="mktime[0]" value="" placeholder="hh" size="2" class="span1" />
 					<input type="text" name="mktime[1]" value="" placeholder="mm" size="2" class="span1" />

@@ -280,10 +280,15 @@ function ub_time() {
 	if ( 'get' == strtolower( $_SERVER['REQUEST_METHOD'] ) ) {
 		get_template_part( 'pages/time' );
 	} else {
-		$_POST = stripslashes_deep( $_POST );
+		$_POST        = stripslashes_deep( $_POST );
 		$content_type = 'text/html';
-		$format = isset( $_POST['date_format'] ) ? $_POST['date_format'] : 'Y-m-d H:i:s T';
-		$stamp = time();
+		$format       = isset( $_POST['date_format'] ) ? $_POST['date_format'] : 'Y-m-d H:i:s T';
+		$datetime     = new DateTime();
+		$timezone     = new DateTimeZone( $_POST['date_timezone'] ?? 'UTC' );
+		$stamp        = false;
+
+		$datetime->setTimeZone( new DateTimeZone( 'UTC' ) );
+
 		if ( isset( $_POST['mktime'], $_POST['mktime'][0], $_POST['mktime'][1], $_POST['mktime'][2], $_POST['mktime'][3], $_POST['mktime'][4], $_POST['mktime'][5] )
 			&& '' != implode( '', $_POST['mktime'] )
 		) {
@@ -302,24 +307,30 @@ function ub_time() {
 			// echo "{$_POST['strtotime']} == " . $stamp . " == " . date( 'Y-m-d H:i:s', $stamp );
 		}
 
+		if ( $stamp ) {
+			$datetime->setTimestamp( $stamp );
+		}
+
+		$datetime->setTimeZone( $timezone );
+
 		?><html>
 		<table class="table table-bordered">
 			<tbody>
 				<tr>
 					<th scope="row">Timestamp</th>
-					<td><?php echo $stamp ?></td>
+					<td><?php echo $datetime->getTimestamp(); ?></td>
 				</tr>
 				<tr>
 					<th scope="row"><code>mktime</code></th>
-					<td><?php echo "mktime( " . date( "G, i, s, n, j, Y", $stamp ) . " )" ?></td>
+					<td><?php echo "mktime( " . date( "G, i, s, n, j, Y", $datetime->getTimestamp() ) . " )"; ?></td>
 				</tr>
 				<tr>
 					<th scope="row">Formatted</th>
-					<td><?php echo date( $format, $stamp ) ?></td>
+					<td><?php echo $datetime->format( $format ); ?></td>
 				</tr>
 				<tr>
 					<th scope="row">Local</th>
-					<td><?php echo wp_date( $format, $stamp ) ?></td>
+					<td><?php echo wp_date( $format, $datetime->getTimestamp() ); ?></td>
 				</tr>
 			</tbody>
 		</table>

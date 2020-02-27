@@ -218,7 +218,15 @@ function ub_serialization() {
 			$JSON_PRETTY_PRINT = defined( 'JSON_PRETTY_PRINT' ) ? JSON_PRETTY_PRINT : null;
 			echo json_encode( call_user_func( create_function('', "return {$_POST['serializee']};" ) ), $JSON_PRETTY_PRINT );
 		} elseif ( 'JSON Decode' == $_POST['serialization'] ) {
-			var_export( json_decode( $_POST['serializee'], true ) );
+			$export = var_export( json_decode( $_POST['serializee'], true ), true );
+			$patterns = [
+				"/array \(/"                       => '[',
+				"/^([ ]*)\)(,?)$/m"                => '$1]$2',
+				"/=>[ ]?\n[ ]+\[/"                 => '=> [',
+				"/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
+				'/NULL/'                           => 'null',
+			];
+			echo preg_replace( array_keys($patterns), array_values($patterns), $export );
 		} else {
 			$unserialized = unserialize( $_POST['serializee'] );
 			if ( false !== $unserialized ) {

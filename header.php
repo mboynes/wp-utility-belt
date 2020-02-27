@@ -27,8 +27,6 @@
 					<ul class="nav">
 						<li class="active"><a href="#home">Home</a></li>
 						<li><a href="#wordpress">Hook</a></li>
-						<li><a href="#elasticsearch">Elasticsearch</a></li>
-						<li><a href="#passwords">Passwords</a></li>
 						<li><a href="#regex">Regex</a></li>
 						<li><a href="#time">Date &amp; Time</a></li>
 						<li><a href="#printf">Printf</a></li>

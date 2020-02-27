@@ -161,40 +161,6 @@ function ub_wordpress() {
 add_action( 'wp_ajax_wordpress', 'ub_wordpress' );
 
 
-function ub_elasticsearch() {
-	if ( 'get' == strtolower( $_SERVER['REQUEST_METHOD'] ) ) {
-		get_template_part( 'pages/elasticsearch' );
-	} else {
-		$_POST = stripslashes_deep( $_POST );
-		if ( !isset( $_POST['es_url'], $_POST['es_query'] ) )
-			die( 'Invalid query' );
-
-		# Remember for next time
-		set_transient( 'es_url', $_POST['es_url'], 365 * DAY_IN_SECONDS );
-		set_transient( 'es_query', $_POST['es_query'], 365 * DAY_IN_SECONDS );
-
-		$request = wp_remote_post( $_POST['es_url'], array(
-			'headers' => array( 'Content-Type' => 'application/json' ),
-			'body' => $_POST['es_query']
-		) );
-		var_export( $request );
-	}
-	exit;
-}
-add_action( 'wp_ajax_elasticsearch', 'ub_elasticsearch' );
-
-
-function ub_passwords() {
-	if ( 'get' == strtolower( $_SERVER['REQUEST_METHOD'] ) ) {
-		get_template_part( 'pages/passwords' );
-	} else {
-
-	}
-	exit;
-}
-add_action( 'wp_ajax_passwords', 'ub_passwords' );
-
-
 function ub_regex() {
 	if ( 'get' == strtolower( $_SERVER['REQUEST_METHOD'] ) ) {
 		get_template_part( 'pages/regex' );

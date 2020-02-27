@@ -9,7 +9,6 @@ This theme makes it easy to:
 
 * Test out arbitrary WordPress code
 * Test out WordPress code at any arbitrary action
-* Query an Elasticsearch server using the HTTP API
 * Test regular expressions in PHP
 * Experiment with date and time functions
 * Experiment with printf formatting

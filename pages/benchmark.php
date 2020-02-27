@@ -7,7 +7,7 @@
 					<div class="control-group">
 						<label class="control-label" for="iterations">Iterations</label>
 						<div class="controls">
-							<input type="number" name="iterations" value="100000" id="iterations" class="span2" />
+							<input type="number" name="iterations" value="1000" id="iterations" class="span2" />
 						</div>
 					</div>
 					<div class="control-group">

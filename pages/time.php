@@ -7,7 +7,7 @@
 			<div class="control-group">
 				<label class="control-label" for="date_format">Format</label>
 				<div class="controls">
-					<input type="text" name="date_format" value="Y-m-d H:i:s T" id="date_format" class="span3" />
+					<input type="text" name="date_format" value="Y-m-d H:i:s T" id="date_format" class="span3 monospace" />
 				</div>
 				<a href="#formatModal" role="button" class="btn" data-toggle="modal">Reference</a>
 			</div>
@@ -25,14 +25,14 @@
 			<div class="control-group">
 				<label class="control-label" for="timestamp">Timestamp</label>
 				<div class="controls">
-					<input type="text" name="timestamp" value="" id="timestamp" class="span3" />
+					<input type="text" name="timestamp" value="" id="timestamp" class="span3 monospace" />
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="strtotime"><code>strtotime</code> string (assumed UTC unless the string incldues a timezone)</label>
 				<div class="controls">
-					<input type="text" name="strtotime" value="" id="strtotime" class="span3" />
+					<input type="text" name="strtotime" value="" id="strtotime" class="span3 monospace" />
 				</div>
 			</div>
 

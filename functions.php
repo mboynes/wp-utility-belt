@@ -7,6 +7,15 @@ function ub_scripts() {
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'bootstrap', 'https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js', array( 'jquery' ), '2.2.1', true );
 	wp_enqueue_script( 'application', get_template_directory_uri() . '/application.js', array( 'jquery', 'bootstrap' ), '1.1.0', true );
+	wp_enqueue_code_editor(
+		array(
+			'type'       => 'php',
+			'codemirror' => array(
+				'lineNumbers' => false,
+				'mode'        => 'text/x-php', // PHP mode with an implied `<?php`.
+			),
+		)
+	);
 }
 add_action( 'wp_enqueue_scripts', 'ub_scripts' );
 

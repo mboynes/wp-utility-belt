@@ -16,3 +16,15 @@ pre.well {
 table pre {
 	white-space: pre;
 }
+.CodeMirror {
+	border: 1px solid #ddd;
+}
+.codemirror-height-auto .CodeMirror {
+	height: auto;
+}
+.codemirror-height-200 .CodeMirror {
+	height: 200px;
+}
+.monospace {
+	font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+}

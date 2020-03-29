@@ -6,7 +6,7 @@
 			<div class="control-group">
 				<label class="control-label" for="serializee">String or Expression</label>
 				<div class="controls">
-					<textarea name="serializee" id="serializee" rows="3" cols="40" class="span6"></textarea>
+					<textarea name="serializee" id="serializee" rows="3" cols="40" class="span6 monospace"></textarea>
 					<p class="help-block">An expression to serialize can be any PHP that could be returned by a function, like array('foo','bar').</p>
 				</div>
 			</div>

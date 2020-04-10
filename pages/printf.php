@@ -5,7 +5,7 @@
 			<div class="control-group">
 				<label class="control-label" for="printf_format">Format</label>
 				<div class="controls">
-					<input type="text" name="printf_format" value="The %s ate %d %s!" id="printf_format" class="span3" />
+					<input type="text" name="printf_format" value="The %s ate %d %s!" id="printf_format" class="span3 monospace" />
 				</div>
 				<a href="#printfModal" role="button" class="btn" data-toggle="modal">Reference</a>
 			</div>
@@ -13,7 +13,7 @@
 			<div class="control-group">
 				<label class="control-label" for="printf_arguments">Arguments (one per line</label>
 				<div class="controls">
-					<textarea name="printf_arguments" id="printf_arguments" rows="4" class="span3"></textarea>
+					<textarea name="printf_arguments" id="printf_arguments" rows="4" class="span3 monospace"></textarea>
 				</div>
 			</div>
 

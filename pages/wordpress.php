@@ -13,7 +13,7 @@
 					<div class="control-group">
 						<label class="control-label" for="code">Any PHP entered here will be run through a full pageload, not a "short init"</label>
 						<div class="controls">
-							<textarea name="code" rows="8" cols="40" class="span6"></textarea>
+							<textarea data-ub-codemirror name="code" rows="8" cols="40" class="span6"></textarea>
 						</div>
 					</div>
 					<div class="form-actions">

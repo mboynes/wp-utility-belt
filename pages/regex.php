@@ -6,14 +6,14 @@
 			<div class="control-group">
 				<label class="control-label" for="expression">Regex</label>
 				<div class="controls">
-					<textarea name="expression" id="expression" rows="3" cols="40" class="span6"></textarea>
+					<textarea name="expression" id="expression" rows="3" cols="40" class="span6 monospace"></textarea>
 					<p class="help-block">Don't forget to wrap your expression, e.g. /expression/</p>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="replace">Replace</label>
 				<div class="controls">
-					<textarea name="replace" id="replace" rows="3" cols="40" class="span6"></textarea>
+					<textarea name="replace" id="replace" rows="3" cols="40" class="span6 monospace"></textarea>
 				</div>
 			</div>
 			<div class="control-group">

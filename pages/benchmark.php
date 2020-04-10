@@ -12,20 +12,20 @@
 					</div>
 					<div class="control-group">
 						<label class="control-label" for="code_a">Environment (e.g. shared variables, functions, etc.)</label>
-						<div class="controls">
-							<textarea name="env" id="env" rows="4" cols="40" class="span6"></textarea>
+						<div class="controls codemirror-height-auto">
+							<textarea data-ub-codemirror name="env" id="env" rows="4" cols="40" class="span6"></textarea>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label" for="code_a">Test A</label>
-						<div class="controls">
-							<textarea name="code_a" id="code_a" rows="8" cols="40" class="span6"></textarea>
+						<div class="controls codemirror-height-200">
+							<textarea data-ub-codemirror name="code_a" id="code_a" rows="8" cols="40" class="span6"></textarea>
 						</div>
 					</div>
 					<div class="control-group">
 						<label class="control-label" for="code_b">Test B</label>
-						<div class="controls">
-							<textarea name="code_b" id="code_b" rows="8" cols="40" class="span6"></textarea>
+						<div class="controls codemirror-height-200">
+							<textarea data-ub-codemirror name="code_b" id="code_b" rows="8" cols="40" class="span6"></textarea>
 						</div>
 					</div>
 					<div class="form-actions">

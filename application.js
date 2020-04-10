@@ -57,6 +57,7 @@ jQuery(function($){
 		else {
 			$.get(ajaxurl, {action:hash}, function(data){
 				$('#view_wrapper').append(data);
+				initialize_codemirror();
 			});
 		}
 		$('.active').removeClass('active');
@@ -64,6 +65,33 @@ jQuery(function($){
 	}
 	window.onhashchange = get_hash;
 
+	function initialize_codemirror() {
+		$('#view_wrapper')
+			// Include a data-ub-codemirror attribute to make it eligible for CodeMirror.
+			.find('[data-ub-codemirror]')
+			.each(function(index, element) {
+				var $element = $(element);
+
+				if ($element.data('ub-codemirror') === '1') {
+					// Already initialized.
+					return;
+				}
+
+				// Initialize CodeMirror instance.
+				var editor = wp.codeEditor.initialize($element);
+				$element.data('ub-codemirror', '1');
+
+				// Copy code back to <textarea> on change so it's submitted.
+				editor.codemirror.on('change', function () {
+					var value = editor.codemirror.getValue();
+					if (value !== $element.val()) {
+						$element.val(value).trigger('change');
+					}
+				});
+			});
+	}
+
 	get_hash();
+	initialize_codemirror();
 });
 var hash;

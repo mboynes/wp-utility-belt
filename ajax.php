@@ -73,30 +73,34 @@ function ub_benchmark() {
 					'b' => array(),
 				);
 
+				$remaining = array(
+					'a' => $iterations,
+					'b' => $iterations,
+				);
+
 				ob_start();
-				$loops = ceil( $iterations / 1000 );
-				for ( $j = 0; $j <= $loops; ++$j ) {
-					$i = 0;
+				while ( $remaining['a'] && $remaining['b'] ) {
 					$start = microtime( true );
-					while ( $i < $iterations && $i < $j * 1000 ) {
-						$i++;
+					for ( $j = 1; $j <= 1000 && $remaining[ $order[0] ]; $j++ ) {
 						@ob_clean();
+						$remaining[ $order[0] ]--;
+
 						if ( false === eval( $_POST[ 'code_' . $order[0] ] ) ) {
 							ob_end_flush();
-							echo 'PHP Error encountered in code A, execution halted';
+							echo "PHP Error encountered in code " . strtoupper( $order[0] ) . ", execution halted";
 							break 2;
 						}
 					}
 					$times[ $order[0] ][] = microtime( true ) - $start;
 
-					$i = 0;
 					$start = microtime( true );
-					while ( $i < $iterations && $i < $j * 1000 ) {
-						$i++;
+					for ( $j = 1; $j <= 1000 && $remaining[ $order[1] ]; $j++ ) {
 						@ob_clean();
+						$remaining[ $order[1] ]--;
+
 						if ( false === eval( $_POST[ 'code_' . $order[1] ] ) ) {
 							ob_end_flush();
-							echo 'PHP Error encountered in code B, execution halted';
+							echo "PHP Error encountered in code " . strtoupper( $order[1] ) . ", execution halted";
 							break 2;
 						}
 					}

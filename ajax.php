@@ -213,9 +213,9 @@ function ub_serialization() {
 	} else {
 		$_POST = stripslashes_deep( $_POST );
 		if ( 'Serialize' == $_POST['serialization'] ) {
-			echo serialize( call_user_func( create_function('', "return {$_POST['serializee']};") ) );
+			echo serialize( eval( "return {$_POST['serializee']};" ) );
 		} elseif ( 'JSON Encode' == $_POST['serialization'] ) {
-			echo wp_json_encode( call_user_func( create_function('', "return {$_POST['serializee']};" ) ), JSON_PRETTY_PRINT );
+			echo wp_json_encode( eval( "return {$_POST['serializee']};" ), JSON_PRETTY_PRINT );
 		} elseif ( 'JSON Decode' == $_POST['serialization'] ) {
 			ub_nicer_var_export( json_decode( $_POST['serializee'], true ) );
 		} else {

@@ -272,22 +272,14 @@ function ub_time() {
 
 		$datetime->setTimeZone( new DateTimeZone( 'UTC' ) );
 
-		if ( isset( $_POST['mktime'], $_POST['mktime'][0], $_POST['mktime'][1], $_POST['mktime'][2], $_POST['mktime'][3], $_POST['mktime'][4], $_POST['mktime'][5] )
-			&& '' != implode( '', $_POST['mktime'] )
+		if ( isset( $_POST['mktime'][0], $_POST['mktime'][1], $_POST['mktime'][2], $_POST['mktime'][3], $_POST['mktime'][4], $_POST['mktime'][5] )
+			&& '' !== implode( '', $_POST['mktime'] )
 		) {
-			array_walk( $_POST['mktime'], create_function( '&$a', '$a = (int) $a;' ) );
-			$stamp = call_user_func_array( 'mktime', $_POST['mktime'] );
-			// $mkstamp = call_user_func_array( 'mktime', $_POST['mktime'] );
-			// echo "Make Time\n==================================================================\n";
-			// echo 'mktime( ' . implode( ', ', $_POST['mktime'] ) . " ) == $mkstamp (" . date( 'Y-m-d H:i:s', $mkstamp ) . ")\n\n";
+			$stamp = call_user_func_array( 'mktime', array_map( 'intval', $_POST['mktime'] ) );
 		} elseif ( isset( $_POST['timestamp'] ) && !empty( $_POST['timestamp'] ) ) {
 			$stamp = (int) $_POST['timestamp'];
-			// echo "Timestamp\n================================\n";
-			// echo "{$_POST['timestamp']} == " . date( 'Y-m-d H:i:s', $_POST['timestamp'] ) . "\n\n";
 		} elseif ( isset( $_POST['strtotime'] ) && !empty( $_POST['strtotime'] ) ) {
 			$stamp = strtotime( $_POST['strtotime'] );
-			// echo "String to Timestamp\n========================================================\n";
-			// echo "{$_POST['strtotime']} == " . $stamp . " == " . date( 'Y-m-d H:i:s', $stamp );
 		}
 
 		if ( $stamp ) {

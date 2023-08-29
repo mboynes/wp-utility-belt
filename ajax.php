@@ -316,11 +316,13 @@ function ub_export_value( $value, $depth = 0 ) {
 				array_map( static fn( $v ) => ub_export_value( $v, $depth + 1 ) . ',', $value )
 			) . "\n{$this_indent}]";
 		} else {
+			$keys = array_map( 'ub_export_value', array_keys( $value ) );
+			$length = max( array_map( 'strlen', $keys ) );
 			return "[\n{$next_indent}" . implode(
 				"\n{$next_indent}",
 				array_map(
-					static fn( $k, $v ) => ub_export_value( $k ) . ' => ' . ub_export_value( $v, $depth + 1 ) . ',',
-					array_keys( $value ),
+					static fn( $k, $v ) => $k . str_repeat( ' ', $length - strlen( $k ) ) . ' => ' . ub_export_value( $v, $depth + 1 ) . ',',
+					$keys,
 					array_values( $value )
 				)
 			) . "\n{$this_indent}]";

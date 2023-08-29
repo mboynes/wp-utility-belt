@@ -240,22 +240,94 @@ function ub_serialization() {
 }
 add_action( 'wp_ajax_serialization', 'ub_serialization' );
 
+/**
+ * Like var_export, but nicer.
+ *
+ * Differences include:
+ * - Short array syntax
+ * - Single quotes for strings, double quotes for strings with single quotes
+ * - Trailing commas
+ * - null vs NULL
+ * - indexed arrays are rendered without keys
+ *
+ * @param mixed $value
+ * @param boolean $echo
+ * @return void|string
+ */
 function ub_nicer_var_export( $value, $echo = true ) {
-	$export   = var_export( $value, true );
-	$patterns = [
-		"/array \(/"                       => '[',
-		"/^([ ]*)\)(,?)$/m"                => '$1]$2',
-		"/=>[ ]?\n[ ]+\[/"                 => '=> [',
-		"/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
-		'/NULL/'                           => 'null',
-	];
-
-	$render = preg_replace( array_keys( $patterns ), array_values( $patterns ), $export );
-
 	if ( $echo ) {
-		echo $render;
+		echo ub_export_value( $value );
 	} else {
-		return $render;
+		return ub_export_value( $value );
+	}
+}
+
+/**
+ * Determine if an array is indexed (vs associative).
+ *
+ * @param array $value
+ * @return boolean
+ */
+function ub_is_indexed_array( $value ) {
+	return is_array( $value ) && array_keys( $value ) === range( 0, count( $value ) - 1 );
+}
+
+/**
+ * Given a string, return it quoted for use in PHP code, preferring single quotes.
+ *
+ * @param string $s String to quote.
+ * @return string
+ */
+function ub_quotify( string $s ): string {
+	if (strpos( $s, "'" ) !== false && strpos( $s, '"' ) === false) {
+		return '"' .  $s . '"';
+	} else {
+		return "'" . addcslashes( $s, "'" ) . "'";
+	}
+}
+
+/**
+ * Given a value, export it as usable PHP code.
+ *
+ * @param mixed $value Value to export.
+ * @param int $depth Current depth of recursion for indentation.
+ */
+function ub_export_value( $value, $depth = 0 ) {
+	if ( $value === false ) {
+		return 'false';
+	} elseif ( $value === true ) {
+		return 'true';
+	} elseif ( is_null( $value ) ) {
+		return 'null';
+	} elseif ( is_string( $value ) ) {
+		return ub_quotify( $value );
+	} elseif ( is_scalar( $value ) ) {
+		return $value;
+	} elseif ( is_array( $value ) ) {
+		if ( empty( $value ) ) {
+			return '[]';
+		}
+
+		$this_indent = str_repeat( "\t", $depth );
+		$next_indent = "{$this_indent}\t";
+		if ( ub_is_indexed_array( $value ) ) {
+			return "[\n{$next_indent}" . implode(
+				"\n{$next_indent}",
+				array_map( static fn( $v ) => ub_export_value( $v, $depth + 1 ) . ',', $value )
+			) . "\n{$this_indent}]";
+		} else {
+			return "[\n{$next_indent}" . implode(
+				"\n{$next_indent}",
+				array_map(
+					static fn( $k, $v ) => ub_export_value( $k ) . ' => ' . ub_export_value( $v, $depth + 1 ) . ',',
+					array_keys( $value ),
+					array_values( $value )
+				)
+			) . "\n{$this_indent}]";
+		}
+	} else {
+		// Objects are too difficult to deal with.
+		return var_export( $value, true );
 	}
 }
 
